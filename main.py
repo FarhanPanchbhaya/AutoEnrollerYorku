@@ -1,5 +1,3 @@
-import random
-
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -27,16 +25,18 @@ for x in range(numOfAttempts):
     # driver.find_element(By.NAME, "password").send_keys("your password.")
     # sleep(5)
     driver.find_element(By.NAME,"dologin").click()
-    sleep(15)
+    sleep(20)
     driver.find_element(By.NAME,'5.5.1.27.1.11.0').click()
     sleep(5)
     driver.find_element(By.XPATH, "//select[@name='5.5.1.27.1.11.0']/option[text()='FALL/WINTER 2024-2025 UNDERGRADUATE STUDENTS']").click()
     sleep(10)
     driver.find_element(By.NAME, "5.5.1.27.1.13").click()
     sleep(10)
-    driver.find_element(By.NAME, "5.1.27.1.23").click()
+    driver.find_element(By.NAME, "5.1.27.1.23").click() #this clicks on "Add a course"
+    #driver.find_element(By.NAME, "5.1.27.1.27").click() #this clicks on "Transfer a course"
+    #uncomment only ONE of the two above, if you are just trying to switch sections, use "transfer a course"
     sleep(10)
-    driver.find_element(By.NAME,'5.1.27.7.7').send_keys("T97S01")
+    driver.find_element(By.NAME,'5.1.27.7.7').send_keys("T97S01") #Course Catalogue number here
     sleep(10)
     driver.find_element(By.NAME,'5.1.27.7.9').click()
     sleep(10)
