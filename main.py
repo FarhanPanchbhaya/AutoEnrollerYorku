@@ -18,7 +18,7 @@ myoptions.add_argument("profile-directory=Profile 7")
 driver = webdriver.Chrome(service=service, options=myoptions)
 sleep(4)
 
-for x in range(2):
+for x in range(numOfAttempts):
     driver.get("https://wrem.sis.yorku.ca/Apps/WebObjects/REM.woa/wa/DirectAction/rem")
     sleep(7)
     # Only uncomment below if ur username and password isnt pre-entered by google
