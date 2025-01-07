@@ -12,7 +12,7 @@ class CourseEnrollmentApp:
     def __init__(self):
         self.window = ctk.CTk()
         self.window.title("Course Enrollment Assistant")
-        self.window.geometry("800x500")  # Made window larger to accommodate new fields
+        self.window.geometry("800x500")  
 
         # Variables
         self.is_running = False
@@ -20,7 +20,7 @@ class CourseEnrollmentApp:
         self.num_attempts = ctk.StringVar(value="5")
         self.time_between = ctk.StringVar(value="1800")
         self.enrollment_type = ctk.StringVar(value="add")
-        # New variables for Chrome settings
+        
         default_chrome_path = os.path.expandvars(r"%LOCALAPPDATA%\Google\Chrome\User Data")
         self.chrome_user_data = ctk.StringVar(value=default_chrome_path)
         self.chrome_profile = ctk.StringVar(value="Profile 1")
@@ -62,7 +62,7 @@ class CourseEnrollmentApp:
         course_frame = ctk.CTkFrame(main_frame)
         course_frame.pack(fill="x", padx=20, pady=10)
 
-        course_label = ctk.CTkLabel(course_frame, text="Course Code:")
+        course_label = ctk.CTkLabel(course_frame, text="Course Catalogue Number (6 characters):")
         course_label.pack(side="left", padx=10)
 
         course_entry = ctk.CTkEntry(course_frame, textvariable=self.course_code)
@@ -79,7 +79,7 @@ class CourseEnrollmentApp:
                                        variable=self.enrollment_type, value="add")
         add_radio.pack(side="left", padx=10)
 
-        swap_radio = ctk.CTkRadioButton(type_frame, text="Transfer Course",
+        swap_radio = ctk.CTkRadioButton(type_frame, text="Transfer Section",
                                         variable=self.enrollment_type, value="transfer")
         swap_radio.pack(side="left", padx=10)
 
