@@ -83,7 +83,7 @@ class CourseEnrollmentApp:
                                         variable=self.enrollment_type, value="transfer")
         swap_radio.pack(side="left", padx=10)
 
-        # Attempts Configuration
+        # Attempts config
         attempts_frame = ctk.CTkFrame(main_frame)
         attempts_frame.pack(fill="x", padx=20, pady=10)
 
