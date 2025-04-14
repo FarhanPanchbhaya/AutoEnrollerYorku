@@ -1,29 +1,60 @@
 # AutoEnrollerYorku
-A python selenium script which attempts to enroll in a course periodically at a user set interval.
 
----
-### Instructions for Use
+A Python script using Selenium that automatically attempts to enroll in York University courses at user-defined intervals.
 
-1. Download chromedriver, make sure to download the one that matches your chrome version. This will likely be the stable chromedriver win64 from [here](https://googlechromelabs.github.io/chrome-for-testing/#stable). Put the chromedriver.exe in the same directory that you place main.py in.
+## Setup Instructions
 
-2. Download/import the file "main.py" from this repository.
+### Setting up a Virtual Environment (optional)
 
-3. install selenium, `pip install selenium` in console, as well as customtkinter `pip install customtkinter`. 
+```powershell
+# Create a virtual environment
+python -m venv .venv
 
-4. Run the file. fill in the parameters - 
-    Type "chrome://version" into your chrome browser to find the profile number (you'll find it in the "profile path" section).
-    Don't set the time between attempts too low, YorkU's REM might time you out or ban you for spamming.
+# Activate the virtual environment
+.\.venv\Scripts\Activate.ps1
 
-5. Close google chrome if opened, start the script
+# Install required packages
+pip install selenium customtkinter
+```
 
-Note: May have to change line 170. it is currently set for Fall/Winter 2024-2025. 
+If you prefer not to use a virtual environment:
 
----
+```powershell
+# Install required packages globally
+pip install selenium customtkinter
+```
 
-### Future plans
+### Chrome WebDriver Setup
 
-1. Allow the script to run headless, without a Chrome UI.
+1. Download the appropriate ChromeDriver from [Chrome for Testing](https://googlechromelabs.github.io/chrome-for-testing/#stable)
+   - Make sure to match your Chrome browser version
+   - Download the stable chromedriver (win64)
+2. Place `chromedriver.exe` in the same directory as `main.py`
 
-2. Allow the script to run while another Chrome window is open.
+## Usage Instructions
 
-3. Create a script that instead checks VSB for an empty space in a course, and either alerts the user when a space is found or enrolls on its own.
+1. Activate your virtual environment if you created one, otherwise move to step 2 (see above)
+2. Run the script: `python main.py`
+3. Fill in the parameters in the application:
+   - To find your Chrome profile path/number, type `chrome://version` in Chrome
+   - Look for "Profile Path" in the information displayed
+   - Don't set attempts too frequently to avoid timing out or being banned
+4. Close any running Chrome instances before starting the script
+5. Click Start to begin the enrollment process
+
+> **Note:** The script is currently configured for Fall/Winter 2024-2025. You may need to modify line 170 for different academic terms.
+
+
+## Future Plans
+
+1. Implement headless mode (running without Chrome UI)
+2. Allow script to run alongside other Chrome windows
+3. Change the script to check VSB instead, to automatically enroll when spaces are found
+
+## Requirements
+
+- Python 3.6+
+- Chrome browser
+- Libraries:
+  - selenium
+  - customtkinter
