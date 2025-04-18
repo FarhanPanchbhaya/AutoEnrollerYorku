@@ -63,7 +63,7 @@ pip install -r requirements.txt
    - Continue checking until a spot is found or you click "Stop"
    - Attempt enrollment automatically when a spot becomes available
 
-> **Note:** The script is currently configured for Summer 2025. You may need to modify line 316-317 for different academic terms. [value 0 is Fall/Winter undergrad, value 1 is Grad or Osgoode students, value 2 is Summer]
+> **Note:** The script is currently configured for Summer 2025. You need to modify line 316-317 for different academic terms. [value 0 is Fall/Winter undergrad, value 1 is Grad or Osgoode students, value 2 is Summer]
 
 
 ## Requirements
