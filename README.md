@@ -14,14 +14,14 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 
 # Install required packages
-pip install selenium customtkinter
+pip install -r requirements.txt
 ```
 
 If you prefer not to use a virtual environment:
 
 ```powershell
 # Install required packages globally
-pip install selenium customtkinter
+pip install -r requirements.txt
 ```
 
 ### Chrome WebDriver Setup
@@ -32,6 +32,8 @@ pip install selenium customtkinter
 2. Place `chromedriver.exe` in the same directory as `main.py`
 
 ## Usage Instructions
+
+### Direct Enrollment (main.py)
 
 1. Activate your virtual environment if you created one, otherwise move to step 2 (see above)
 2. Run the script: `python main.py`
@@ -44,12 +46,37 @@ pip install selenium customtkinter
 
 > **Note:** The script is currently configured for Fall/Winter 2024-2025. You may need to modify line 170 for different academic terms.
 
+### Course Availability Checker (VSBChecker.py)
 
-## Future Plans
+1. Activate your virtual environment if you created one (see above)
+2. Run the script: `python VSBChecker.py`
+3. Fill in the parameters in the application:
+   - Course Catalogue Number (6 characters code)
+   - Check Interval (seconds between availability checks)
+   - Session Duration (minutes before a new browser session is created)
+4. Click "Start Checking" to begin monitoring for course availability
+5. The script will:
+   - Check Visual Schedule Builder (VSB) for course availability
+   - Attempt enrollment automatically when a spot becomes available
+   - Refresh the browser session periodically to prevent timeouts
+   - Continue checking until a spot is found or you click "Stop"
 
-1. Implement headless mode (running without Chrome UI)
-2. Allow script to run alongside other Chrome windows
-3. Change the script to check VSB instead, to automatically enroll when spaces are found
+> **Note:** The script is currently configured for SUMMER 2025. You may need to modify line 267 for different academic terms.
+
+## Features
+
+### main.py
+
+- Automatically attempts enrollment at specified intervals
+- Configurable number of attempts and interval between attempts
+- Support for both adding courses and transferring sections
+
+### VSBChecker.py
+
+- Monitors course availability through Visual Schedule Builder
+- Only attempts enrollment when a spot becomes available
+- Automatically refreshes the browser session to prevent timeouts
+- Provides status updates with timestamps
 
 ## Requirements
 
@@ -57,4 +84,5 @@ pip install selenium customtkinter
 - Chrome browser
 - Libraries:
   - selenium
+  - beautifulsoup4
   - customtkinter
