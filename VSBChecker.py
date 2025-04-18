@@ -170,6 +170,18 @@ class VSBCheckerApp:
         options.add_argument(f"--user-data-dir={self.chrome_user_data.get()}")
         options.add_argument(f"profile-directory={self.chrome_profile.get()}")
         
+        # Redirect browser errors to /dev/null or NUL
+        options.add_argument("--log-level=3")  # Only fatal errors
+        
+        # Suppress WebDriver logging
+        import logging
+        from selenium.webdriver.remote.remote_connection import LOGGER
+        LOGGER.setLevel(logging.WARNING)
+        
+        # Disable all Chrome logging to console
+        options.add_experimental_option('excludeSwitches', ['enable-logging', 'enable-automation'])
+        options.add_experimental_option('useAutomationExtension', False)
+        
         self.driver = webdriver.Chrome(service=service, options=options)
         self.session_start_time = time()
         self.update_status("Browser session initialized")
@@ -302,7 +314,7 @@ class VSBCheckerApp:
             self.driver.find_element(By.NAME, '5.5.1.27.1.11.0').click()
             sleep(5)
             self.driver.find_element(By.XPATH,
-                                    "//select[@name='5.5.1.27.1.11.0']/option[text()='SUMMER 2025']").click()
+                                "//select[@name='5.5.1.27.1.11.0']/option[@value='2']").click()
             sleep(10)
             self.driver.find_element(By.NAME, "5.5.1.27.1.13").click()
             sleep(10)
@@ -329,7 +341,7 @@ class VSBCheckerApp:
                 self.stop_checking()
                 return True
             else:
-                self.update_status("Enrollment attempt failed even though space was available.")
+                self.update_status("Enrollment attempt failed even though space was available when last checked.")
                 return False
                 
         except Exception as e:

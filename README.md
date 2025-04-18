@@ -1,6 +1,6 @@
 # AutoEnrollerYorku
 
-A Python script using Selenium that automatically attempts to enroll in York University courses at user-defined intervals.
+A Python script using Selenium that automatically attempts to enroll into the desired York University course when an empty space is found.
 
 ## Setup Instructions
 
@@ -29,7 +29,7 @@ pip install -r requirements.txt
 1. Download the appropriate ChromeDriver from [Chrome for Testing](https://googlechromelabs.github.io/chrome-for-testing/#stable)
    - Make sure to match your Chrome browser version
    - Download the stable chromedriver (win64)
-2. Place `chromedriver.exe` in the same directory as `main.py`
+2. Place `chromedriver.exe` in the same directory as `VSBChecker.py`
 
 ## Usage Instructions
 
@@ -51,32 +51,20 @@ pip install -r requirements.txt
 1. Activate your virtual environment if you created one (see above)
 2. Run the script: `python VSBChecker.py`
 3. Fill in the parameters in the application:
-   - Course Catalogue Number (6 characters code)
+   - To find your Chrome profile path/number, type `chrome://version` in Chrome
+   - Look for "Profile Path" in the information displayed
    - Check Interval (seconds between availability checks)
-   - Session Duration (minutes before a new browser session is created)
-4. Click "Start Checking" to begin monitoring for course availability
-5. The script will:
+   - Session Duration (minutes before a new browser session is created, leave at 15 if unsure)
+4. Close any running Chrome instances before starting the script
+5. Click "Start Checking" to begin monitoring for course availability
+6. The script will:
    - Check Visual Schedule Builder (VSB) for course availability
-   - Attempt enrollment automatically when a spot becomes available
    - Refresh the browser session periodically to prevent timeouts
    - Continue checking until a spot is found or you click "Stop"
+   - Attempt enrollment automatically when a spot becomes available
 
-> **Note:** The script is currently configured for SUMMER 2025. You may need to modify line 267 for different academic terms.
+> **Note:** The script is currently configured for Summer 2025. You may need to modify line 316-317 for different academic terms. [value 0 is Fall/Winter undergrad, value 1 is Grad or Osgoode students, value 2 is Summer]
 
-## Features
-
-### main.py
-
-- Automatically attempts enrollment at specified intervals
-- Configurable number of attempts and interval between attempts
-- Support for both adding courses and transferring sections
-
-### VSBChecker.py
-
-- Monitors course availability through Visual Schedule Builder
-- Only attempts enrollment when a spot becomes available
-- Automatically refreshes the browser session to prevent timeouts
-- Provides status updates with timestamps
 
 ## Requirements
 
