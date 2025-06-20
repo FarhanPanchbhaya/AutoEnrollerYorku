@@ -314,7 +314,7 @@ class VSBCheckerApp:
             self.driver.find_element(By.NAME, '5.5.1.27.1.11.0').click()
             sleep(5)
             self.driver.find_element(By.XPATH,
-                                "//select[@name='5.5.1.27.1.11.0']/option[@value='2']").click()
+                                "//select[@name='5.5.1.27.1.11.0']/option[@value='0']").click()
             sleep(10)
             self.driver.find_element(By.NAME, "5.5.1.27.1.13").click()
             sleep(10)

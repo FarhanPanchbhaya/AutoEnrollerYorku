@@ -27,12 +27,12 @@ pip install -r requirements.txt
 ### Chrome WebDriver Setup
 
 1. Download the appropriate ChromeDriver from [Chrome for Testing](https://googlechromelabs.github.io/chrome-for-testing/#stable)
-   - Make sure to match your Chrome browser version
+   - Make sure to match your Chrome browser version 
    - Download the stable chromedriver (win64)
 2. Place `chromedriver.exe` in the same directory as `VSBChecker.py`
 
 ## Usage Instructions
-
+<!--
 ### Direct Enrollment (main.py)
 
 1. Activate your virtual environment if you created one, otherwise move to step 2 (see above)
@@ -45,6 +45,7 @@ pip install -r requirements.txt
 5. Click Start to begin the enrollment process
 
 > **Note:** The script is currently configured for Fall/Winter 2024-2025. You may need to modify line 170 for different academic terms.
+-->
 
 ### Course Availability Checker (VSBChecker.py)
 
@@ -63,7 +64,7 @@ pip install -r requirements.txt
    - Continue checking until a spot is found or you click "Stop"
    - Attempt enrollment automatically when a spot becomes available
 
-> **Note:** The script is currently configured for Summer 2025. You need to modify line 316-317 for different academic terms. [value 0 is Fall/Winter undergrad, value 1 is Grad or Osgoode students, value 2 is Summer]
+> **Note:** The script is currently configured for Fall/Winter 2025-2026. You need to modify line 316-317 for different academic terms. [value 0 is Fall/Winter undergrad, value 1 is Grad or Osgoode students, value 2 is Summer]
 
 
 ## Requirements
