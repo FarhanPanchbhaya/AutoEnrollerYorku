@@ -1,7 +1,8 @@
 chromedriver.exe
-
+.chrome/
 .venv/
 
 .idea/
 
 msger.py
+
