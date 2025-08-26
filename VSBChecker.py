@@ -9,6 +9,7 @@ from time import sleep, time
 import threading
 import os
 import datetime
+from typing import Optional
 
 
 class VSBCheckerApp:
@@ -24,13 +25,15 @@ class VSBCheckerApp:
         self.session_duration = ctk.StringVar(value="15")  # Default session duration in minutes
         self.enrollment_type = ctk.StringVar(value="add")
         
-        default_chrome_path = os.path.expandvars(r"%LOCALAPPDATA%\Google\Chrome\User Data")
+        # Updated paths for Chrome for Testing
+        # Chrome for Testing is required because regular Chrome no longer allows specific profile usage
+        default_chrome_path = os.path.expandvars(r"%LOCALAPPDATA%\Google\Chrome for Testing\User Data")
         self.chrome_user_data = ctk.StringVar(value=default_chrome_path)
-        self.chrome_profile = ctk.StringVar(value="Profile 1")
+        self.chrome_profile = ctk.StringVar(value="Default")
 
         # Driver object
-        self.driver = None
-        self.session_start_time = None
+        self.driver: Optional[webdriver.Chrome] = None
+        self.session_start_time: Optional[float] = None
 
         self.create_widgets()
 
@@ -49,7 +52,7 @@ class VSBCheckerApp:
         chrome_frame.pack(fill="x", padx=20, pady=10)
 
         # Chrome User Data Directory
-        user_data_label = ctk.CTkLabel(chrome_frame, text="Chrome User Data Directory:")
+        user_data_label = ctk.CTkLabel(chrome_frame, text="Chrome for Testing User Data Directory:")
         user_data_label.pack(side="left", padx=10)
 
         user_data_entry = ctk.CTkEntry(chrome_frame, textvariable=self.chrome_user_data, width=300)
@@ -59,7 +62,7 @@ class VSBCheckerApp:
         profile_frame = ctk.CTkFrame(main_frame)
         profile_frame.pack(fill="x", padx=20, pady=10)
 
-        profile_label = ctk.CTkLabel(profile_frame, text="Chrome Profile:")
+        profile_label = ctk.CTkLabel(profile_frame, text="Chrome for Testing Profile:")
         profile_label.pack(side="left", padx=10)
 
         profile_entry = ctk.CTkEntry(profile_frame, textvariable=self.chrome_profile)
@@ -166,9 +169,13 @@ class VSBCheckerApp:
         service = Service(executable_path="chromedriver.exe")
         options = webdriver.ChromeOptions()
 
-        # Use the user-provided Chrome settings
+        # Set the binary location to Chrome for Testing
+        chrome_testing_path = os.path.join(os.getcwd(), "chrome", "win64-139.0.7258.154", "chrome-win64", "chrome.exe")
+        options.binary_location = chrome_testing_path
+
+        # Use the user-provided Chrome for Testing settings
         options.add_argument(f"--user-data-dir={self.chrome_user_data.get()}")
-        options.add_argument(f"profile-directory={self.chrome_profile.get()}")
+        options.add_argument(f"--profile-directory={self.chrome_profile.get()}")
         
         # Redirect browser errors to /dev/null or NUL
         options.add_argument("--log-level=3")  # Only fatal errors
@@ -184,7 +191,7 @@ class VSBCheckerApp:
         
         self.driver = webdriver.Chrome(service=service, options=options)
         self.session_start_time = time()
-        self.update_status("Browser session initialized")
+        self.update_status("Browser session initialized with Chrome for Testing")
         return self.driver
 
     def check_session_expired(self):
@@ -203,6 +210,10 @@ class VSBCheckerApp:
     def is_course_available(self):
         """Check if the course has available spots using BeautifulSoup"""
         try:
+            if not self.driver:
+                self.update_status("Driver not initialized")
+                return False
+                
             page_source = self.driver.page_source
             soup = BeautifulSoup(page_source, 'html.parser')
             
@@ -210,7 +221,10 @@ class VSBCheckerApp:
             catalog_number = self.course_code.get()
             
             # Find all catalog numbers on the page
-            catalog_elements = soup.find_all(string=lambda text: text and catalog_number in text)
+            def text_contains_catalog(text):
+                return text and catalog_number in text
+            
+            catalog_elements = soup.find_all(string=text_contains_catalog)
             
             if not catalog_elements:
                 self.update_status(f"Couldn't find catalog number {catalog_number} on the page")
@@ -228,7 +242,10 @@ class VSBCheckerApp:
                 
                 if parent:
                     # Check if this section contains "Full" text
-                    full_text = parent.find(string=lambda text: text and "Full" in text)
+                    def text_contains_full(text):
+                        return text and "Full" in text
+                    
+                    full_text = parent.find(string=text_contains_full)
                     if not full_text:
                         self.update_status(f"Found available section with catalog {catalog_number}!")
                         return True
@@ -244,6 +261,10 @@ class VSBCheckerApp:
     def navigate_to_vsb(self):
         """Navigate to Visual Schedule Builder and search for the course"""
         try:
+            if not self.driver:
+                self.update_status("Driver not initialized")
+                return False
+                
             # Navigate to VSB
             self.driver.get("https://schedulebuilder.yorku.ca/vsb/")
             sleep(5)
@@ -267,7 +288,7 @@ class VSBCheckerApp:
             )
             
             # Enter course code and search
-            self.driver.find_element(By.ID, "term_2024115117").click()
+            self.driver.find_element(By.ID, "term_2025102119").click() # You may have to change this number here, it is the "session" on VSB website. LINE 291
             sleep(3)
             search_input = self.driver.find_element(By.ID, "code_number")
             search_input.clear()
@@ -287,6 +308,10 @@ class VSBCheckerApp:
     def refresh_vsb(self):
         """Refresh the VSB page to check for updated availability"""
         try:
+            if not self.driver:
+                self.update_status("Driver not initialized")
+                return False
+                
             self.driver.refresh()
             sleep(6)
             self.update_status("VSB page refreshed")
@@ -298,6 +323,10 @@ class VSBCheckerApp:
     def attempt_enrollment(self):
         """Try to enroll in the course"""
         try:
+            if not self.driver:
+                self.update_status("Driver not initialized")
+                return False
+                
             self.update_status("Space available! Attempting enrollment...")
             
             # Navigate to the enrollment page
@@ -307,14 +336,16 @@ class VSBCheckerApp:
             # Login if necessary
             login_button = self.driver.find_elements(By.NAME, "dologin")
             if login_button:
-                login_button.click()
+                login_button[0].click()
                 sleep(20)
             
             # Select term
             self.driver.find_element(By.NAME, '5.5.1.27.1.11.0').click()
             sleep(5)
             self.driver.find_element(By.XPATH,
-                                "//select[@name='5.5.1.27.1.11.0']/option[@value='0']").click()
+                                "//select[@name='5.5.1.27.1.11.0']/option[@value='0']").click() 
+            # You may have to change this value, it is the option in the drop down in REM
+            # [value 0 is Fall/Winter undergrad, value 1 is Grad or Osgoode students, value 2 is Summer]. 
             sleep(10)
             self.driver.find_element(By.NAME, "5.5.1.27.1.13").click()
             sleep(10)
@@ -383,10 +414,12 @@ class VSBCheckerApp:
                     sleep(check_interval)
             else:
                 current_time = datetime.datetime.now().strftime("%H:%M:%S")
-                elapsed_mins = (time() - self.session_start_time) / 60
-                remaining_mins = int(self.session_duration.get()) - int(elapsed_mins)
-                
-                self.update_status(f"Course is FULL at {current_time}. Session expires in ~{remaining_mins} minutes. Checking again in {check_interval} seconds...")
+                if self.session_start_time:
+                    elapsed_mins = (time() - self.session_start_time) / 60
+                    remaining_mins = int(self.session_duration.get()) - int(elapsed_mins)
+                    self.update_status(f"Course is FULL at {current_time}. Session expires in ~{remaining_mins} minutes. Checking again in {check_interval} seconds...")
+                else:
+                    self.update_status(f"Course is FULL at {current_time}. Checking again in {check_interval} seconds...")
                 sleep(check_interval)
 
         # Clean up at the end

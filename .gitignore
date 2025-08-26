@@ -1,8 +1,11 @@
 chromedriver.exe
-.chrome/
+
+chrome/
+
 .venv/
 
 .idea/
 
 msger.py
 
+noChecks.py
